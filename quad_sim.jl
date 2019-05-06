@@ -178,9 +178,9 @@ using Plots
         Y_KD = -.35;         # KD value in Y position control
         Y_KI_lim = .25;         # Error to start calculating integral term
 
-        Z_KP = 5/1.7;    # KP value in altitude control
+        Z_KP = 10/1.7;    # KP value in altitude control
         Z_KI = 0*3;    # KI value in altitude control
-        Z_KD = -10/1.980;  # KD value in altitude control
+        Z_KD = -100/1.980;  # KD value in altitude control
         Z_KI_lim = .25;         # Error to start calculating integral term
 
         phi_KP = 4.5;      # KP value in roll control 2
@@ -594,6 +594,14 @@ function QuadSim(Xd,Yd,Zd,ground_truth)
         c = 1
 
         for t = 0:Quad.Ts:Quad.sim_time
+                # #Spiral Trajectory
+                # Quad.X_des_GF = 4*sin(3*t/pi)
+                # Quad.Y_des_GF = 4*cos(3*t/pi)
+                # Quad.Z_des_GF = -2*sin(2*t/pi)-1
+                # Figure Eight
+                Quad.X_des_GF = 4*sin(2*t/pi)
+                Quad.Y_des_GF = 4*sin(2*t/pi)*cos(2*t/pi)
+                Quad.Z_des_GF = Zd
                 QuadSensorMeasurements(Quad)
                 QuadPositionPID(Quad)
                 QuadAttitudePID(Quad)
@@ -635,7 +643,7 @@ function QuadPlot(j, plotlim, qb)
 end
 
 
-Quad, t_plot, U1, U2, U3, U4, X, Y, Z, phi, theta, psi  = QuadSim(-4,-3,-2,0)
+Quad, t_plot, U1, U2, U3, U4, X, Y, Z, phi, theta, psi  = QuadSim(-4,-3,-1,0)
 @show Quad.X Quad.Y Quad.Z
 
 l = Quad.l
